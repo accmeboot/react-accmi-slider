@@ -11,47 +11,37 @@ npm i accmi-slider
 ```
 
 ## Example
-```html
-    <link rel="stylesheet" href="../accmi-slider.css">
-    <div class='accmi-slider'>
-      <div class='accmi-slider-wrapper'>
+```JSX
+  import RAslider from 'react-accmi-slider';
 
-        <div class='accmi-slider-wrapper-item'>
-          <img src='./images/1.jpg' alt="">
-        </div>
+  settings = {
+    arrows: true,
+    duration: 0.8,
+    animation: 'ease',
+    visibileItem: 1,
+    arrowLeftClass: 'prev',
+    arrowRightClass: 'next',
+    offsetRight: 0,
+    dots: true,
+    beforeChange: (e) => console.log(e),
+    infinity: false,
+    typeChange: 'carousel',
+    arrowLeftContent: '',
+    arrowRightContent: ''
+  };
 
-        <div class='accmi-slider-wrapper-item'>
-          <img src='./images/2.jpg' alt="">
-        </div>
-
-        <div class='accmi-slider-wrapper-item'>
-          <img src='./images/3.jpg' alt="">
-        </div>
-
-        <div class='accmi-slider-wrapper-item'>
-          <img src='./images/1.jpg' alt="">
-        </div>
-      </div>
-    </div>
-    
-    <script src="../accmi-slider.js"></script>
-    <script >
-        new AccmiSlider({
-          arrows: true,
-          duration: 0.8,
-          animation: 'ease',
-          visibileItem: 1,
-          arrowLeftClass: 'prev',
-          arrowRightClass: 'next',
-          offsetRight: 0,
-          dots: true,
-          beforeChange: (e) => {
-            console.log(e);
-          },
-          infinity: true,
-          typeChange: 'carousel'
-        }, document.querySelector('accmi-slider'));
-    </script>
+  <RAslider {...this.settings}>
+    <div><img src='./images/1.jpg' alt='' /></div>
+    <div><img src='./images/2.jpg' alt='' /></div>
+    <div><img src='./images/3.jpg' alt='' /></div>
+    <div><img src='./images/1.jpg' alt='' /></div>
+    <div><img src='./images/2.jpg' alt='' /></div>
+    <div><img src='./images/1.jpg' alt='' /></div>
+    <div><img src='./images/2.jpg' alt='' /></div>
+    <div><img src='./images/3.jpg' alt='' /></div>
+    <div><img src='./images/1.jpg' alt='' /></div>
+    <div><img src='./images/2.jpg' alt='' /></div>
+  </RAslider>
 ```
 
 ![GitHub Logo](./src/images/gameplay.gif)

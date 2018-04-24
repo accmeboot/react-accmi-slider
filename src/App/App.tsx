@@ -24,27 +24,16 @@ export class AppContainer extends React.Component<AppContainerProps, {}> {
   render() {
     return (
       <RAslider {...this.settings}>
-
         <div><img src='./images/1.jpg' alt='' /></div>
-
         <div><img src='./images/2.jpg' alt='' /></div>
-
         <div><img src='./images/3.jpg' alt='' /></div>
-
         <div><img src='./images/1.jpg' alt='' /></div>
-
         <div><img src='./images/2.jpg' alt='' /></div>
-
         <div><img src='./images/1.jpg' alt='' /></div>
-
         <div><img src='./images/2.jpg' alt='' /></div>
-
         <div><img src='./images/3.jpg' alt='' /></div>
-
         <div><img src='./images/1.jpg' alt='' /></div>
-
         <div><img src='./images/2.jpg' alt='' /></div>
-
       </RAslider>
     );
   }
