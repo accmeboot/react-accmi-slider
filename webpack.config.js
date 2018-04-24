@@ -8,16 +8,25 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 const NODE_ENV = process.env.NODE_ENV ? process.env.NODE_ENV : 'development';
-const SCSS_LOADER = 'style-loader!css-loader?modules=true&importLoaders=1&localIdentName=[name]__[local]__[hash:base64:5]!sass-loader';
+
+// const SCSS_LOADER = 'style-loader!css-loader?modules=true&importLoaders=1&localIdentName=[name]__[local]__[hash:base64:5]!sass-loader';
+
+const SCSS = [
+    'style-loader',
+    {
+      loader: 'typings-for-css-modules-loader',
+      options: {
+        modules: true,
+        namedExport: true,
+        localIdentName: '[name][hash:base64:5]'
+      }
+    },
+    'sass-loader'
+  ]
+
 const extarctSCSS = [
   MiniCssExtractPlugin.loader,
   'css-loader?module&importLoaders=1&localIdentName=[hash:base64:5]!sass-loader'
-];
-
-const CSS_LOADER = 'style-loader!css-loader';
-const extarctCSS = [
-  MiniCssExtractPlugin.loader,
-  'css-loader'
 ];
 
 const config = {
@@ -66,12 +75,7 @@ const config = {
       },
       {
         test: /\.scss$/,
-        loader: NODE_ENV === 'development' ? SCSS_LOADER : extarctSCSS,
-        exclude: /node_modules/
-      },
-      {
-        test: /\.css$/,
-        loader: NODE_ENV === 'development' ? CSS_LOADER : extarctCSS,
+        use: NODE_ENV === 'development' ? SCSS : extarctSCSS,
         exclude: /node_modules/
       },
       {

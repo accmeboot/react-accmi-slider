@@ -1,8 +1,3 @@
-declare module '*.scss' {
-  const content: {[className: string]: string};
-  export = content;
-}
-
 export interface RAsliderSettings {
   arrows?: boolean;
   duration?: number;
@@ -15,6 +10,13 @@ export interface RAsliderSettings {
   beforeChange?: (e: number) => void;
   infinity?: boolean;
   typeChange?: string;
-  arrowLeftContent?: string;
-  arrowRightContent?: string;
+  arrowLeftContent?: JSX.Element;
+  arrowRightContent?: JSX.Element;
+}
+
+export interface Touches {
+  start: number;
+  end: number;
+  endDetect: boolean;
+  current: number;
 }

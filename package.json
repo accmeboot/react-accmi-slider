@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/accmi/react-accmi-slider#readme",
   "dependencies": {
+    "classnames": "^2.2.5",
     "react": "^16.3.2",
     "react-dom": "^16.3.2"
   },
@@ -37,6 +38,7 @@
     "tslint": "^5.9.1",
     "tslint-loader": "^3.6.0",
     "typescript": "^2.8.3",
+    "typings-for-css-modules-loader": "^1.7.0",
     "uglifyjs-webpack-plugin": "^1.2.5",
     "url-loader": "^1.0.1",
     "webpack": "^4.6.0",
