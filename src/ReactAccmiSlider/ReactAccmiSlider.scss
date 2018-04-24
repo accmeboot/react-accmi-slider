@@ -1,0 +1,108 @@
+.accmiSlider {
+  position: relative;
+  overflow: hidden;
+  display: block;
+  box-sizing: border-box;
+
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+
+  -webkit-touch-callout: none;
+  -khtml-user-select: none;
+  -ms-touch-action: pan-y;
+      touch-action: pan-y;
+  -webkit-tap-highlight-color: transparent;
+
+  * {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+        user-select: none;
+
+  -webkit-touch-callout: none;
+  -khtml-user-select: none;
+  -ms-touch-action: pan-y;
+    touch-action: pan-y;
+  -webkit-tap-highlight-color: transparent;
+  user-drag: none;
+  }
+
+  .wrapper {
+    display: flex;
+    &.fade {
+      transition: none !important;
+    }
+    .item {
+      flex: 0 0 100%;
+      transition: opacity 0.8s ease, transform 0.8s ease;
+      img {
+        width: 100%;
+        display: block;
+        pointer-events: none;
+      }
+      &.fadeIn {
+        opacity: 1;
+      }
+      &.fadeOut {
+        opacity: 0.2;
+      }
+      &.zoomIn {
+        transform: scale(1);
+      }
+      &.zoomOut {
+        transform: scale(0);
+      }
+    }
+  }
+  .arrowLeft, .arrowRight {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    background-color: rgb(255, 255, 255);
+    opacity: 0.4;
+    z-index: 1;
+    cursor: pointer;
+    transition: opacity .3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &:hover {
+      opacity: 1;
+    }
+    span {
+      opacity: 0.5;
+      font-family: 'Roboto', sans-serif;
+    }
+  }
+
+  .arrowLeft {
+    left: 0;
+  }
+  .arrowRight {
+    right: 0;
+  }
+
+  .dotsContainer {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1rem;
+    .dot {
+      width: 12px;
+      height: 12px;
+      background-color: #494b5270;
+      opacity: 0.3;
+      margin-right: 10px;
+      cursor: pointer;
+      &.active {
+        opacity: 1;
+      }
+    }
+  }
+}
