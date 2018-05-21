@@ -1,18 +1,20 @@
-# Accmi-slider
+# react-accmi-slider
 
-## Carousel with vanilla.js
+## Carousel with react
 
-##### Carousel with vanilla.js, mobile touch and desktop click.
+##### Carousel with react, mobile touch and desktop click.
 
 ## Package Managers
 
 ```npm
-npm i accmi-slider
+npm i react-accmi-slider
 ```
 
 ## Example
-```JSX
-  import RAslider from 'react-accmi-slider';
+```jsx
+
+import 'react-accmi-slider/css/app.css';
+import RAslider from 'react-accmi-slider';
 
   settings = {
     arrows: true,
@@ -26,21 +28,21 @@ npm i accmi-slider
     beforeChange: (e) => console.log(e),
     infinity: false,
     typeChange: 'carousel',
-    arrowLeftContent: '',
-    arrowRightContent: ''
+    arrowLeftContent: <span className='asd'>prev</span>,
+    arrowRightContent: <span className='asd'>next</span>
   };
 
   <RAslider {...this.settings}>
-    <div><img src='./images/1.jpg' alt='' /></div>
-    <div><img src='./images/2.jpg' alt='' /></div>
-    <div><img src='./images/3.jpg' alt='' /></div>
-    <div><img src='./images/1.jpg' alt='' /></div>
-    <div><img src='./images/2.jpg' alt='' /></div>
-    <div><img src='./images/1.jpg' alt='' /></div>
-    <div><img src='./images/2.jpg' alt='' /></div>
-    <div><img src='./images/3.jpg' alt='' /></div>
-    <div><img src='./images/1.jpg' alt='' /></div>
-    <div><img src='./images/2.jpg' alt='' /></div>
+    <div className='item'><img src='./images/1.jpg' alt='' /></div>
+    <div className='item'><img src='./images/2.jpg' alt='' /></div>
+    <div className='item'><img src='./images/3.jpg' alt='' /></div>
+    <div className='item'><img src='./images/1.jpg' alt='' /></div>
+    <div className='item'><img src='./images/2.jpg' alt='' /></div>
+    <div className='item'><img src='./images/1.jpg' alt='' /></div>
+    <div className='item'><img src='./images/2.jpg' alt='' /></div>
+    <div className='item'><img src='./images/3.jpg' alt='' /></div>
+    <div className='item'><img src='./images/1.jpg' alt='' /></div>
+    <div className='item'><img src='./images/2.jpg' alt='' /></div>
   </RAslider>
 ```
 
@@ -63,7 +65,6 @@ offsetRight     | number  | 0        | padding-right in % for element
 dots            | boolean | true     | enable dots (pagination)
 beforeChange    | void    | ()=>null | callback before sliding
 infinity        | boolean | false    | infinity sliding
-typeChange      | string  | carousel | type animation change (no stable) carousel | zoom | fade
 
 
 ### Methods

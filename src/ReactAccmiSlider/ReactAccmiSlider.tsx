@@ -2,7 +2,7 @@ import * as React from 'react';
 import { RAsliderSettings, Touches } from '../../@types/base';
 import * as cl from 'classnames';
 
-import * as Styles from './ReactAccmiSLider.scss';
+import './ReactAccmiSLider.scss';
 
 interface RAsliderProps extends RAsliderSettings {
   children: Array<JSX.Element>;
@@ -15,11 +15,16 @@ interface RAsliderstate extends RAsliderSettings {
   maxPosition: number;
 }
 
-export class RAslider extends React.Component<RAsliderProps, RAsliderstate> {
+export default class RAslider extends React.Component<RAsliderProps, RAsliderstate> {
   main: HTMLDivElement;
   wrapper: HTMLDivElement;
   widthContainer: number;
-  touches: Touches;
+  touches: Touches = {
+    start: 0,
+    end: 0,
+    endDetect: false,
+    current: 0
+  };
   proc: number;
 
   state = {
@@ -31,7 +36,8 @@ export class RAslider extends React.Component<RAsliderProps, RAsliderstate> {
     arrowRightClass: this.props.arrowRightClass !== undefined ? this.props.arrowRightClass : 'next',
     offsetRight: this.props.offsetRight !== undefined ? this.props.offsetRight : 0,
     dots: this.props.dots !== undefined ? this.props.dots : true,
-    // beforeChange: this.props.beforeChange !== undefined ? (e) => this.props.beforeChange(e) : () => null,
+    beforeChange: this.props.beforeChange !== undefined ?
+      (e) => this.props.beforeChange ? this.props.beforeChange(e) : null : () => null,
     infinity: this.props.infinity !== undefined ? this.props.infinity : false,
     typeChange: this.props.typeChange !== undefined ? this.props.typeChange : 'carousel',
     arrowLeftContent: this.props.arrowLeftContent !== undefined ? this.props.arrowLeftContent : <span>prev</span>,
@@ -88,8 +94,6 @@ export class RAslider extends React.Component<RAsliderProps, RAsliderstate> {
   listners(): void {}
 
   nextSlide() {
-    // this.typeOut(this.settings.position);
-
     const newPostition = () => {
       if (this.state.infinity) {
         this.setState({
@@ -108,44 +112,150 @@ export class RAslider extends React.Component<RAsliderProps, RAsliderstate> {
 
     const transform = () => {
       this.state.wrapper.style.transform = `translate3d(${-this.state.position * this.proc}%, 0, 0)`;
-      // this.typeIn(this.settings.position);
     };
 
     this.state.typeChange !== 'carousel' ? setTimeout(transform, (this.state.duration * 1000)) : transform();
 
-    // this.changesDot();
-    // this.state.beforeChange(this.state.position);
+    this.props.beforeChange ? this.props.beforeChange(this.state.position) : null;
   }
 
   prevSlide() {
-    console.log(321);
+      const newPostition = () => {
+        if (this.state.infinity) {
+          this.setState({
+            position: this.state.position <= 0 ? 0 : --this.state.position
+          });
+
+          return;
+        }
+
+        this.setState({
+          position: this.state.position <= 0 ? 0 : --this.state.position
+        });
+      };
+
+      newPostition();
+
+      const transform = () => {
+        this.state.wrapper.style.transform = `translate3d(${-this.state.position * this.proc}%, 0, 0)`;
+      };
+
+      this.state.typeChange !== 'carousel' ? setTimeout(transform, (this.state.duration * 1000)) : transform();
+
+      this.props.beforeChange ? this.props.beforeChange(this.state.position) : null;
+  }
+
+  touchStart(e) {
+    this.touches.start = e.touches !== undefined ? e.touches[0].clientX : e.clientX;
+    this.touches.endDetect = true;
+    this.wrapper.style.transition = `transform 0s ${this.state.animation}`;
+  }
+
+  touchEnd(e) {
+    this.scrollEnabled();
+
+    const x = e.changedTouches !== undefined ? e.changedTouches[0].clientX : e.clientX;
+    const proc = 100 / (this.widthContainer / (this.touches.start - x));
+
+    this.wrapper.style.transition = `transform ${this.state.duration}s ${this.state.animation}`;
+    this.touches.end = x;
+    this.touches.endDetect = false;
+
+    if (Math.abs(proc) > 20) {
+      proc > 0 ? this.nextSlide() : this.prevSlide();
+    } else {
+      this.wrapper.style.transform = `translate3d(${(-this.state.position * this.proc)}%, 0, 0)`;
+    }
+  }
+
+  touchMove(e) {
+    if (this.touches.endDetect && this.state.typeChange === 'carousel') {
+      const x = e.touches !== undefined ? e.touches[0].clientX : e.clientX;
+      const proc = 100 / (this.widthContainer / (this.touches.start - x));
+
+      if (Math.abs(proc) > 5) this.scrollDisable();
+
+      this.touches.current = x;
+
+      this.state.wrapper.style.transform = `translate3d(${(-this.state.position * this.proc) + (-proc)}%, 0, 0)`;
+    }
+  }
+
+  dotsGoToSlide(index) {
+    this.state.wrapper.style.transform = `translate3d(${-index * this.proc}%, 0, 0)`;
+
+    this.setState({
+      position: index
+    });
+
+    this.props.beforeChange ? this.props.beforeChange(index) : null;
+  }
+
+  scrollDisable() {
+    document.ontouchmove = (e) => e.preventDefault();
+  }
+
+  scrollEnabled() {
+    document.ontouchmove = (e) => true;
   }
 
   render() {
     const { children } = this.props;
-    const { arrowLeftContent, arrowRightContent, arrowLeftClass, arrowRightClass, arrows } = this.state;
+    const {
+      arrowLeftContent,
+      arrowRightContent,
+      arrowLeftClass,
+      arrowRightClass,
+      arrows,
+      dots,
+      position
+     } = this.state;
 
     return (
-      <div className={Styles.accmiSlider} ref={(ref: HTMLDivElement) => this.main = ref}>
+      <div className='accmiSlider' ref={(ref: HTMLDivElement) => this.main = ref}>
         {
           arrows &&
           [
-            <div key={0} className={cl(Styles.arrowLeft, arrowLeftClass)} onClick={this.prevSlide.bind(this)}> { arrowLeftContent } </div>,
-            <div key={1} className={cl(Styles.arrowRight, arrowRightClass)} onClick={this.nextSlide.bind(this)}> { arrowRightContent } </div>
+            <div key={0} className={cl('accmiSlider-arrowLeft', arrowLeftClass)} onClick={this.prevSlide.bind(this)}> { arrowLeftContent } </div>,
+            <div key={1} className={cl('accmiSlider-arrowRight', arrowRightClass)} onClick={this.nextSlide.bind(this)}> { arrowRightContent } </div>
           ]
         }
 
-        <div className={Styles.wrapper} ref={(ref: HTMLDivElement) => this.wrapper = ref}>
+        <div className={'accmiSlider-wrapper'} ref={(ref: HTMLDivElement) => this.wrapper = ref}>
           {
             children.map((item, index) => {
               return (
-                <div key={index} className={cl(Styles.item, item.props.className !== undefined && item.props.className)}>
+                <div
+                  key={index}
+                  className={cl('accmiSlider-wrapper-item', item.props.className !== undefined && item.props.className)}
+                  onTouchStart={this.touchStart.bind(this)}
+                  onTouchEnd={this.touchEnd.bind(this)}
+                  onTouchMove={this.touchMove.bind(this)}
+                  onMouseDown={this.touchStart.bind(this)}
+                  onMouseUp={this.touchEnd.bind(this)}
+                  onMouseMove={this.touchMove.bind(this)}
+                >
                   { item.props.children }
                 </div>
               );
             })
           }
         </div>
+        {
+          dots &&
+          <div className={'accmiSlider-dotsContainer'}>
+            {
+              children.map((item, index) => {
+                return (
+                  <div
+                    key={index}
+                    className={cl('accmiSlider-dotsContainer-dot', {['active']: index === position})}
+                    onClick={this.dotsGoToSlide.bind(this, index)}
+                  />
+                );
+              })}
+          </div>
+        }
       </div>
     );
   }

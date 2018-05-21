@@ -12,33 +12,26 @@ const NODE_ENV = process.env.NODE_ENV ? process.env.NODE_ENV : 'development';
 // const SCSS_LOADER = 'style-loader!css-loader?modules=true&importLoaders=1&localIdentName=[name]__[local]__[hash:base64:5]!sass-loader';
 
 const SCSS = [
-    'style-loader',
-    {
-      loader: 'typings-for-css-modules-loader',
-      options: {
-        modules: true,
-        namedExport: true,
-        localIdentName: '[name][hash:base64:5]'
-      }
-    },
-    'sass-loader'
-  ]
-
+  'style-loader',
+  'css-loader',
+  'sass-loader'
+];
 const extarctSCSS = [
   MiniCssExtractPlugin.loader,
-  'css-loader?module&importLoaders=1&localIdentName=[hash:base64:5]!sass-loader'
+  'css-loader',
+  'sass-loader'
 ];
 
 const config = {
-  context: path.join(__dirname, 'src'),
+  context: NODE_ENV === 'production' ? path.join(__dirname, 'src/ReactAccmiSlider') : path.join(__dirname, 'src'),
 
   entry: {
-    app: 'index.tsx'
+    app: NODE_ENV === 'production' ? './ReactAccmiSlider.tsx' : 'index.tsx'
   },
 
   output: {
-    path: path.join(__dirname, 'build'),
-    filename: 'bundle.js',
+    path: path.join(__dirname, 'dist'),
+    filename: 'ReactAccmiSlider.js',
     publicPath: '/'
   },
 
@@ -74,7 +67,7 @@ const config = {
         exclude: /node_modules/
       },
       {
-        test: /\.scss$/,
+        test: /\.(scss|css)$/,
         use: NODE_ENV === 'development' ? SCSS : extarctSCSS,
         exclude: /node_modules/
       },
@@ -136,11 +129,6 @@ const config = {
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(NODE_ENV)
-    }),
-    new HtmlWebpackPlugin({
-      template: 'templates/index.ejs',
-      inject: 'body',
-      hash: true
     })
   ]
 };
@@ -148,12 +136,26 @@ const config = {
 if (NODE_ENV === 'production') {
   config.plugins.push(
     new UglifyJsPlugin({
-      sourceMap: false
+      sourceMap: true
     })
   )
+
+  config.output = {
+    ...config.output,
+    library: 'RAslider',
+    libraryTarget: 'umd',
+    path: path.join(__dirname, 'dist')
+  }
 }
 
 if (NODE_ENV === 'development') {
+  config.plugins.push(
+    new HtmlWebpackPlugin({
+      template: 'templates/index.ejs',
+      inject: 'body',
+      hash: true
+    })
+  )
   config.plugins.push(
     new webpack.HotModuleReplacementPlugin()
   )

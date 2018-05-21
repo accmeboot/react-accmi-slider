@@ -1,10 +1,17 @@
 import * as React from 'react';
 import { RAsliderSettings } from '../../@types/base';
-import { RAslider } from '../ReactAccmiSlider/ReactAccmiSlider';
+
+import '../../dist/css/app.css';
+import RAslider from '../../dist/ReactAccmiSlider';
 
 interface AppContainerProps {}
 
 export class AppContainer extends React.Component<AppContainerProps, {}> {
+
+  componentDidMount() {
+    this.slider.dotsGoToSlide(5);
+  }
+
   settings: RAsliderSettings = {
     arrows: true,
     duration: 0.8,
@@ -21,9 +28,11 @@ export class AppContainer extends React.Component<AppContainerProps, {}> {
     arrowRightContent: <span className='asd'>next</span>
   };
 
+  slider: any;
+
   render() {
     return (
-      <RAslider {...this.settings}>
+      <RAslider ref={ref => this.slider = ref} {...this.settings}>
         <div className='item'><img src='./images/1.jpg' alt='' /></div>
         <div className='item'><img src='./images/2.jpg' alt='' /></div>
         <div className='item'><img src='./images/3.jpg' alt='' /></div>
