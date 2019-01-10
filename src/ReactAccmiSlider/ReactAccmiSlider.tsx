@@ -153,6 +153,12 @@ export default class RAslider extends React.Component<RAsliderProps, RAslidersta
     this.wrapper.style.transition = `transform 0s ${this.state.animation}`;
   }
 
+  stopDrag() {
+    this.touches.endDetect = false;
+    this.wrapper.style.transition = `transform ${this.state.duration}s ${this.state.animation}`;
+    this.wrapper.style.transform = `translate3d(${(-this.state.position * this.proc)}%, 0, 0)`;
+  }
+
   touchEnd(e) {
     this.scrollEnabled();
 
@@ -216,7 +222,7 @@ export default class RAslider extends React.Component<RAsliderProps, RAslidersta
      } = this.state;
 
     return (
-      <div className='accmiSlider' ref={(ref: HTMLDivElement) => this.main = ref}>
+      <div className='accmiSlider' ref={(ref: HTMLDivElement) => this.main = ref} onMouseLeave={this.stopDrag.bind(this)}>
         {
           arrows &&
           [
@@ -234,7 +240,6 @@ export default class RAslider extends React.Component<RAsliderProps, RAslidersta
                   className={cl('accmiSlider-wrapper-item', item.props.className !== undefined && item.props.className)}
                   onTouchStart={this.touchStart.bind(this)}
                   onTouchEnd={this.touchEnd.bind(this)}
-                  onMouseLeave={this.touchEnd.bind(this)}
                   onTouchMove={this.touchMove.bind(this)}
                   onMouseDown={this.touchStart.bind(this)}
                   onMouseUp={this.touchEnd.bind(this)}
