@@ -54,6 +54,7 @@ export default class RAslider extends React.Component<RAsliderProps, RAslidersta
       wrapper: this.wrapper,
       maxPosition: this.wrapper.children.length - this.state.visibileItem,
     }, () => {
+      if (this.state.wrapper) {
         this.state.wrapper.style.transition = `transform ${this.state.duration}s ${this.state.animation}`;
 
         this.widthContainer = this.state.main.getBoundingClientRect().width;
@@ -63,20 +64,21 @@ export default class RAslider extends React.Component<RAsliderProps, RAslidersta
           endDetect: false,
           current: 0
         };
+      }
 
-        if (this.state.visibileItem > 1) {
-          [].forEach.call(this.state.wrapper.children, (element, index) => {
-            element.style.flex = `0 0 ${(100 / this.state.visibileItem) - 5}%`;
+      if (this.state.visibileItem > 1) {
+        [].forEach.call(this.state.wrapper.children, (element, index) => {
+          element.style.flex = `0 0 ${(100 / this.state.visibileItem) - 5}%`;
 
-            if (index === this.state.wrapper.children.length - 1) return;
+          if (index === this.state.wrapper.children.length - 1) return;
 
-            element.style.marginRight = `${this.state.offsetRight}%`;
-          });
-        }
+          element.style.marginRight = `${this.state.offsetRight}%`;
+        });
+      }
 
-        this.proc = this.state.visibileItem > 1 ? this.procInit() : 100;
-        this.listners();
-        this.state.wrapper.classList.add(this.state.typeChange);
+      this.proc = this.state.visibileItem > 1 ? this.procInit() : 100;
+      this.listners();
+      this.state.wrapper.classList.add(this.state.typeChange);
     });
   }
 
@@ -182,13 +184,15 @@ export default class RAslider extends React.Component<RAsliderProps, RAslidersta
   }
 
   dotsGoToSlide(index) {
-    this.state.wrapper.style.transform = `translate3d(${-index * this.proc}%, 0, 0)`;
+    if (this.state.wrapper) {
+      this.state.wrapper.style.transform = `translate3d(${-index * this.proc}%, 0, 0)`;
 
-    this.setState({
-      position: index
-    });
+      this.setState({
+        position: index
+      });
 
-    this.props.beforeChange ? this.props.beforeChange(index) : null;
+      this.props.beforeChange ? this.props.beforeChange(index) : null;
+    }
   }
 
   scrollDisable() {
@@ -230,6 +234,7 @@ export default class RAslider extends React.Component<RAsliderProps, RAslidersta
                   className={cl('accmiSlider-wrapper-item', item.props.className !== undefined && item.props.className)}
                   onTouchStart={this.touchStart.bind(this)}
                   onTouchEnd={this.touchEnd.bind(this)}
+                  onMouseLeave={this.touchEnd.bind(this)}
                   onTouchMove={this.touchMove.bind(this)}
                   onMouseDown={this.touchStart.bind(this)}
                   onMouseUp={this.touchEnd.bind(this)}

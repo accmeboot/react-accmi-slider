@@ -2,7 +2,7 @@ import * as React from 'react';
 import { RAsliderSettings } from '../../@types/base';
 
 import '../../dist/css/app.css';
-import RAslider from '../../dist/ReactAccmiSlider';
+import RAslider from '../ReactAccmiSlider/ReactAccmiSlider';
 
 interface AppContainerProps {}
 
